@@ -15,20 +15,67 @@ Access is based on **attributes**: the decision uses who the user is, what the r
 
 # 3. Database
 
-Schema: `roles/abac.prisma`. Summary of relationships so you can quickly recall how things connect.
+Schema: `roles/abac.prisma`.
 
-| Model | Relationship | With | Meaning |
-| ----- | ------------- | ----- | -------- |
-| **User** | N:N | **Role** | A user can have several roles (e.g. RH, Suporte); a role can be assigned to many users. Prisma uses an implicit pivot table. |
-| **User** | 1:N | **UserPermission** | A user can have many custom permission statements (overrides/exceptions per user). |
-| **Role** | 1:N | **RolePermission** | A role has many permission statements (the default ABAC policy for that role). |
+## 3.1. How the relationships work
 
-**Flow when resolving access:**  
-1. Get the user’s **roles** and collect all **RolePermission** rows for those roles.  
-2. Add the user’s **UserPermission** rows (custom/override).  
-3. Merge and evaluate (e.g. deny overrides allow, conditions and fields apply).  
+- **users** and **roles** are linked by **user_roles** (pivot). One user can have many roles; one role can belong to many users. So: *Wendell* can be RH and TI; *João* can be Suporte; the role *TI* can be assigned to Wendell and to others.
+- Each **role** has its own ABAC policies in **role_permissions** (one row = one statement: effect, action, subject, fields, conditions). Those are the default permissions for everyone with that role.
+- **user_permissions** are per-user overrides or extras. If you need “Wendell can also do X” or “João is denied Y”, you add a row here. When resolving access, you merge role_permissions (from all the user’s roles) with user_permissions; deny usually wins over allow.
 
-So: **User ↔ Role** (many-to-many), **Role → RolePermission** (one-to-many), **User → UserPermission** (one-to-many). Role permissions are the base; user permissions extend or override them.
+So: **User ↔ Role** (many-to-many via **user_roles**), **Role → RolePermission** (one-to-many), **User → UserPermission** (one-to-many).
+
+## 3.2. Example data (fictitious)
+
+Roles: **RH**, **Suporte**, **TI**. Users: **Wendell Bitencourt**, **João Frango**.
+
+**users**
+
+| id  | name              | email                    |
+| --- | ----------------- | ------------------------ |
+| u1  | Wendell Bitencourt | wendell@example.com      |
+| u2  | João Frango        | joao.frango@example.com  |
+
+**roles**
+
+| id  | name    |
+| --- | ------- |
+| r1  | RH      |
+| r2  | Suporte |
+| r3  | TI      |
+
+**user_roles** (who has which role)
+
+| userId | roleId |
+| ------ | ------ |
+| u1     | r1     |
+| u1     | r3     |
+| u2     | r2     |
+
+→ Wendell has roles RH and TI. João has role Suporte.
+
+**role_permissions** (ABAC policies per role)
+
+| roleId | effect | action | subject | fields        | conditions  |
+| ------ | ------ | ------ | ------- | ------------- | ----------- |
+| r1     | allow  | read   | user    | null          | null        |
+| r1     | allow  | update | user    | ["name","email"] | {"department":"RH"} |
+| r2     | allow  | read   | chamado | null          | null        |
+| r2     | allow  | update | chamado | ["status"]    | null        |
+| r3     | allow  | read   | user    | null          | null        |
+| r3     | allow  | manage | chamado | null          | null        |
+
+→ RH can read user and update name/email when department is RH. Suporte can read chamado and update status. TI can read user and manage chamado.
+
+**user_permissions** (optional overrides per user)
+
+| userId | effect | action | subject | fields | conditions |
+| ------ | ------ | ------ | ------- | ------ | ---------- |
+| u1     | deny   | update | user    | null   | null       |
+
+→ Example: Wendell is explicitly denied “update user” (e.g. to block editing certain users despite having role TI). In real use you’d often tie this to conditions.
+
+To create this in the DB you can use a [Prisma seed](https://www.prisma.io/docs/guides/database/seed-database) or run the inserts by hand; the `roles/` folder does not include a seed script by default.
 
 # 4. Note: The AWS IAM pattern
 If you look at AWS IAM policies, they follow this same logic, with different key names:
