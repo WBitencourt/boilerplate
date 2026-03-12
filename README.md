@@ -1,2 +1,3 @@
-# architecture
-repository to remember the good architecture, practices and code.
+# Architecture
+
+Repository to remember the good architecture, practices and code.
