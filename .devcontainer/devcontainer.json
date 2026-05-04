@@ -7,6 +7,7 @@
   "features": {
     "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
   },
+  "postCreateCommand": "npm install -g @google/gemini-cli@latest && npm i -g npm@latest",
   "remoteUser": "node", // A imagem javascript-node usa o usuário 'node' por padrão
   "forwardPorts": [3000] // A porta 3000 do container será redirecionada para a porta 3000 do host
 }
