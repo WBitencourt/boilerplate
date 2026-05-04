@@ -1,0 +1,12 @@
+{
+  "name": "Claude Code - NestJS (Node 22)",
+  "build": {
+    // Aqui dizemos para ele usar o arquivo Dockerfile da pasta
+    "dockerfile": "Dockerfile"  
+  },
+  "features": {
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+  },
+  "remoteUser": "node", // A imagem javascript-node usa o usuário 'node' por padrão
+  "forwardPorts": [3000] // A porta 3000 do container será redirecionada para a porta 3000 do host
+}
