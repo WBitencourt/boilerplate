@@ -1,0 +1,15 @@
+.credentials.json
+history.jsonl
+sessions/
+session-env/
+shell-snapshots/
+cache/
+debug/
+downloads/
+paste-cache/
+backups/
+file-history/
+ide/
+stats-cache.json
+.last-cleanup
+.last-update-result.json

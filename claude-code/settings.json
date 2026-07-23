@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import json; json.load\\(open\\('fixtures/sqs/teste-verificacao-campos-desdobramento.json'\\)\\)\")",
+      "Read(//tmp/fixtures-dryrun/sqs/**)",
+      "Bash(python3 -c ' *)"
+    ],
+    "additionalDirectories": [
+      "/home/wbitencourt/bitbucket/oito/everest-prod-external_api-v2/src/hapvida/dto"
+    ]
+  },
+  "model": "sonnet",
+  "effortLevel": "high",
+  "tui": "fullscreen",
+  "theme": "dark"
+}

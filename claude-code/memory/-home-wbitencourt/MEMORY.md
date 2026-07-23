@@ -1,0 +1,1 @@
+- [Backup ~/.claude config to GitHub](backup_claude_config_to_github.md) — mudanças em CLAUDE.md/settings.json/memory vão pra /home/wbitencourt/github/wbitencourt/boilerplate/claude-code (repo = boilerplate, tracking WBitencourt/architecture)

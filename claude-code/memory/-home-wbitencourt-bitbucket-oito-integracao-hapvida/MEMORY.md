@@ -1,0 +1,9 @@
+- [Migração ID→nome](migracao_id_para_nome.md) — iniciativa em andamento: trocar IDs numéricos do payload por nomes resolvidos via API, campo por campo
+- [Campos kebab-case no Projuris](projuris-campo-kebab-case.md) — a API everest-prod-external_api-v2 devolve campos em kebab-case (com exceções confirmadas)
+- [Não editar sem avisar](feedback_no_edicao_sem_aviso.md) — sempre avisar/propor antes de editar em resposta a erro; confiar na mensagem de validação da API, não em XML de outros endpoints
+- [Repo everest-prod-external_api-v2](reference_everest_external_api_repo.md) — fonte de verdade local do contrato REST/SOAP; ler antes de inferir de XML de consulta
+- [soft-erika.json = campos obrigatórios](fixture-soft-erika-campos-obrigatorios.md) — o que não está nesse fixture é opcional; campo ausente que a Projuris exige precisa de fallback tipo "A INFORMAR", não virar obrigatório no DTO
+- [Advogado adverso vs principal: EntidadeWS vs UsuarioWS](advogado-adverso-vs-principal-entidade-vs-usuario.md) — autor_principal (adverso) usa m_entidade; reu_principal (cliente) usa m_usuario, sem fallback de criação
+- [Autor sem advogado (Juizado Especial)](autor-sem-advogado-juizado-especial.md) — advogados.autor_principal pode vir nulo legitimamente; não é erro de payload
+- [EntidadeInputDto: flags agrupadas em tipo_entidade](entidade-tipo-entidade-agrupamento.md) — advogado/adverso/juiz/etc. viraram tipo_entidade.{...} no payload; API Projuris continua flat
+- [Erro deve citar a entidade](feedback_erro_com_contexto_entidade.md) — erros de EntidadeResolverService devem sempre incluir nome/documento/tipo da entidade que falhou

@@ -1,0 +1,1 @@
+- [Notion Tasks page defaults](notion_tasks_page_defaults.md) — ask priority, auto-set Start to creation date, Status stays Not started
