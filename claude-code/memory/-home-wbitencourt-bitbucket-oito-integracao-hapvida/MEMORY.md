@@ -7,3 +7,10 @@
 - [Autor sem advogado (Juizado Especial)](autor-sem-advogado-juizado-especial.md) — advogados.autor_principal pode vir nulo legitimamente; não é erro de payload
 - [EntidadeInputDto: flags agrupadas em tipo_entidade](entidade-tipo-entidade-agrupamento.md) — advogado/adverso/juiz/etc. viraram tipo_entidade.{...} no payload; API Projuris continua flat
 - [Erro deve citar a entidade](feedback_erro_com_contexto_entidade.md) — erros de EntidadeResolverService devem sempre incluir nome/documento/tipo da entidade que falhou
+- [processo/criar vs desdobramento/criar](processo-vs-desdobramento-ws.md) — processo/criar=ProcessoWS (cria processo inteiro), desdobramento/criar=DesdobramentoWS real (add desdobramento a processo existente); não confundir
+- [Dispatch por tipo_payload](fluxo-atualizacao-dispatch-tipo-payload.md) — Cadastro e Atualizacao têm DTO/orchestrator próprios; Desdobramento ainda não implementado; padrão a seguir pro próximo tipo_payload
+- [lista_pedidos = tela Contingenciamento completa](lista-pedidos-contingenciamento-mapeamento.md) — mapeamento tela→campo→tag XML, adverso auto-resolvido, endpoint novo objeto_principal, 2 fallbacks (perda possível/data juros)
+- [raw_error padronizado como array](erro-detalhado-raw-error-padronizado.md) — ItemErroDetalhado[] sempre, step vem de erro.step explícito (não mais split(':'))
+- [Terminologia: adapter vs fluxo normal](terminologia-adapter-vs-fluxo-normal.md) — "adapter"/"adapter do pipeline" = pipeline.adapter.ts; "aplicação"/"fluxo normal" = resto, sem esse adapter
+- [Checar branch antes de assumir ambiente](feedback_checar_branch_antes_de_assumir_ambiente.md) — sempre `git branch --show-current` antes de assumir valores dev/prod (.env, tags Docker, etc.)
+- [Não alarmar sem necessidade](feedback_nao_alarmar_sem_necessidade.md) — se o usuário disser "calma, está tudo certo", parar a investigação daquele ponto imediatamente

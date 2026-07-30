@@ -1,3 +1,10 @@
+# Workflow
+
+## Git branch awareness
+
+- Always check the current git branch (`git branch --show-current`) before assuming which environment (dev/prod/etc.) applies — don't reuse environment-specific values (`.env` contents, image tags, config) seen earlier in the conversation without confirming the current branch first.
+- Treat "troquei de branch" (or similar) from the user as a signal to re-check context before continuing.
+
 # Code Style
 
 ## Function declarations

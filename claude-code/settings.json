@@ -3,10 +3,13 @@
     "allow": [
       "Bash(python3 -c \"import json; json.load\\(open\\('fixtures/sqs/teste-verificacao-campos-desdobramento.json'\\)\\)\")",
       "Read(//tmp/fixtures-dryrun/sqs/**)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(npx jest *)"
     ],
     "additionalDirectories": [
-      "/home/wbitencourt/bitbucket/oito/everest-prod-external_api-v2/src/hapvida/dto"
+      "/home/wbitencourt/bitbucket/oito/everest-prod-external_api-v2/src/hapvida/dto",
+      "/home/wbitencourt/bitbucket/oito/everest-prod-external_api-v2"
     ]
   },
   "model": "sonnet",
