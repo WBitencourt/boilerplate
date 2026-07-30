@@ -1,5 +1,10 @@
 # Workflow
 
+## Sync personal Claude Code config to GitHub
+
+- Whenever personal `~/.claude` files change (`CLAUDE.md`, `settings.json`, or any `projects/*/memory/*` file), copy the changed files into `/home/wbitencourt/github/wbitencourt/boilerplate/claude-code` (mirroring the existing folder structure — memories go under `claude-code/memory/<project-slug>/`) and commit + push that repo (`git -C /home/wbitencourt/github/wbitencourt/boilerplate ...`).
+- Do this proactively, right after making the change, without waiting to be asked.
+
 ## Git branch awareness
 
 - Always check the current git branch (`git branch --show-current`) before assuming which environment (dev/prod/etc.) applies — don't reuse environment-specific values (`.env` contents, image tags, config) seen earlier in the conversation without confirming the current branch first.
