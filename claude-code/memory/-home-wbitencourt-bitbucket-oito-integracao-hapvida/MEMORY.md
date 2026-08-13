@@ -14,3 +14,4 @@
 - [Terminologia: adapter vs fluxo normal](terminologia-adapter-vs-fluxo-normal.md) — "adapter"/"adapter do pipeline" = pipeline.adapter.ts; "aplicação"/"fluxo normal" = resto, sem esse adapter
 - [Checar branch antes de assumir ambiente](feedback_checar_branch_antes_de_assumir_ambiente.md) — sempre `git branch --show-current` antes de assumir valores dev/prod (.env, tags Docker, etc.)
 - [Não alarmar sem necessidade](feedback_nao_alarmar_sem_necessidade.md) — se o usuário disser "calma, está tudo certo", parar a investigação daquele ponto imediatamente
+- [Documento sem sanitização na consulta](documento-sem-sanitizacao-consulta-entidade.md) — numero_documento vai mascarado (como chega da Hapvida) até a Projuris, sem regex de limpeza em lugar nenhum
