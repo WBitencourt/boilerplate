@@ -16,3 +16,4 @@
 - [Não alarmar sem necessidade](feedback_nao_alarmar_sem_necessidade.md) — se o usuário disser "calma, está tudo certo", parar a investigação daquele ponto imediatamente
 - [Documento sem sanitização na consulta](documento-sem-sanitizacao-consulta-entidade.md) — numero_documento vai mascarado (como chega da Hapvida) até a Projuris, sem regex de limpeza em lugar nenhum
 - [Correlacao.md desatualiza sozinho](correlacao-md-desatualiza-apos-renomeacoes.md) — renomes/campos novos no código não propagam pro .md de correlação; auditar contra hard-cadastro.json antes de confiar nele
+- [Tribunal com espaço sobrando na Projuris](projuris-tribunal-espaco-sobrando-dado-sujo.md) — "20ª Região" cadastrado com espaço sobrando no nome; busca exata só bate com o espaço; f:"NOME" é armadilha (campo inválido, retorna registro errado sempre)
