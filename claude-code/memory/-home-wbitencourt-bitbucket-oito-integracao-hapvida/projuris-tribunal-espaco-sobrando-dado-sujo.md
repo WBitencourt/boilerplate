@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7fc0453e-7c51-4930-8979-768d5af673b2
-  modified: 2026-09-02T02:13:05.688Z
+  modified: 2026-09-09T19:06:43.453Z
 ---
 
 Investigando um 500 em `/hapvida/tribunal/consultar` (achado real, corrigido:
@@ -34,3 +34,13 @@ outro caractere invisível) no cadastro da Projuris antes de assumir que é
 erro no payload ou no código. Se isso se repetir com frequência, vale
 reconsiderar a estratégia de busca (ver a opção descartada de investigar
 `tribunal/listar` pra ver se é sistemático na base).
+
+**Atualização (2026-09-09):** o padrão se repetiu — confirmado como
+sistemático, não mais só "dado sujo pontual". `cargo_processo/consultar`
+(`LtCargoProcessoWS`) também usa `f:"NOME"` genérico e sofre exatamente o
+mesmo bug: filtro ignorado silenciosamente, sempre devolve o mesmo registro
+fixo errado ("Administrador de Contratos" em vez do cargo buscado). Campo
+correto: `NOME_CARGO_PROCESSO`. Ver detalhes em
+[[projuris-filtro-nome-generico-ignorado]]. Vale agora auditar todas as
+ocorrências de `f:"NOME"` em `hapvida.service.ts` proativamente — não é mais
+caso isolado.
