@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 235d4f84-7f98-47cd-9e66-7ab69edc8109
-  modified: 2026-09-10T13:56:25.727Z
+  modified: 2026-09-10T14:33:44.581Z
 ---
 
 Em 2026-09-10, um cadastro trabalhista (Dev) enviou `desdobramento_inicial.juiz = "A INFORMAR"`, mas o Projuris salvou o juiz como **"A INFORMAR - CRM AM003070"** — um sufixo que não veio do payload.
@@ -18,10 +18,8 @@ Fluxo rastreado (sem alterar código, só investigação):
 
 **Hipótese principal:** "A INFORMAR" é usado como placeholder padrão em vários campos do payload inteiro (não só juiz), e o Projuris não garante nome único de entidade. Provavelmente existem várias entidades literalmente chamadas "A INFORMAR" no banco (uma para juiz sem documento, outra criada em outro fluxo/matéria como placeholder de médico com CRM). O sufixo "- CRM AM003070" na tela é o próprio Projuris concatenando nome+documento pra diferenciar homônimos na combo — não veio do nosso payload. `resolverPorNome` não filtra por `tipo_entidade` nem valida o match, então pode pegar a entidade errada quando há homônimos.
 
-**Hipótese secundária (não descartada):** o parâmetro `vc` pode fazer match por substring (LIKE) em vez de igualdade exata, batendo em qualquer nome que contenha "A INFORMAR".
+**CONFIRMADO em 2026-09-10** pelo usuário com o XML real da chamada `entidade` "Obtem" (não "Listar"/"Consultar" paginado): a Projuris devolveu `id-entidade=1106733`, `nome="A INFORMAR"`, `juiz="F"`, `tipo-documento-principal="CRM"`, `numero-documento-principal="CRM AM003070"`, `id-categoria-cliente-adverso-categoria-cliente-adverso="MÉDICO(A) ENVOLVIDO"`. Ou seja: existe mesmo um homônimo "A INFORMAR" cadastrado como placeholder de médico (não juiz), e o método "Obtem" da Projuris devolve só o 1º registro que bate no filtro, sem garantir qual — exatamente a hipótese principal. A hipótese secundária (vc = LIKE) fica sem relevância prática, já que o problema é homônimo real, não substring.
 
-**Gap encontrado:** não existe teste unitário cobrindo `resolverPorNome` no repo — esse caminho de ambiguidade nunca foi validado.
+**Fix aplicado (2026-09-10):** por decisão do usuário, a correção foi feita no **adaptador de origem "pipeline"** ([pipeline.adapter.ts](../../../../../bitbucket/oito/integracao-hapvida/src/adapters/pipeline.adapter.ts)), não no `EntidadeResolverService` — pra não "sujar" o integrador com uma regra específica de uma origem. Adicionada `converterAInformarParaNull` + entrada em `CAMINHOS_CAMPO_ANINHADO` pra `desdobramento_inicial.juiz`: quando o valor chega como literal `"A INFORMAR"`, vira `null` antes da validação. Como `idJuiz` no orchestrator só resolve quando `payload.desdobramento_inicial.juiz` é truthy, `null` faz pular a chamada `resolverPorNome` inteira — nunca mais tenta resolver esse placeholder por nome. Testes cobrindo o caso adicionados em `pipeline.adapter.spec.ts`. **Escopo:** só `desdobramento_inicial.juiz` — `desdobramento_adicional[].juiz` tem o mesmo campo/risco mas não foi pedido nem alterado ainda.
 
-**Decisão do usuário (2026-09-10):** por ora, só registrar o achado — não mexer em código. Ver [[migracao_id_para_nome]] e [[projuris-filtro-nome-generico-ignorado]] (padrão relacionado de filtro genérico mal resolvido pela Projuris) e [[terminologia-adapter-vs-fluxo-normal]] pra contexto de nomenclatura do pipeline.
-
-**Como aplicar:** se o bug se repetir ou o usuário pedir pra corrigir, os candidatos de fix discutidos foram: (a) confirmar manualmente no Projuris quantas entidades "A INFORMAR" existem e o que cada uma tem de documento/tipo; (b) fazer `resolverPorNome` exigir `juiz=true` na entidade retornada; (c) validar que o `NOME` retornado bate exatamente com o buscado, rejeitando quando vier com sufixo/diferença.
+Relacionado: [[migracao_id_para_nome]], [[projuris-filtro-nome-generico-ignorado]] (mesmo padrão de filtro genérico mal resolvido pela Projuris), [[terminologia-adapter-vs-fluxo-normal]].
