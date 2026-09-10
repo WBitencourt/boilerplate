@@ -18,3 +18,4 @@
 - [Correlacao.md desatualiza sozinho](correlacao-md-desatualiza-apos-renomeacoes.md) — renomes/campos novos no código não propagam pro .md de correlação; auditar contra hard-cadastro.json antes de confiar nele
 - [Tribunal com espaço sobrando na Projuris](projuris-tribunal-espaco-sobrando-dado-sujo.md) — "20ª Região" cadastrado com espaço sobrando no nome; busca exata só bate com o espaço; f:"NOME" é armadilha (campo inválido, retorna registro errado sempre)
 - [Filtro f:"NOME" genérico é ignorado pela Projuris](projuris-filtro-nome-generico-ignorado.md) — confirmado sistemático: cargo_processo usa f:"NOME" (errado) em vez de f:"NOME_CARGO_PROCESSO", causou cadastro de cargo errado em prod
+- [Juiz virou "A INFORMAR - CRM AM003070"](bug-juiz-a-informar-homonimo-projuris.md) — resolverPorNome busca só por NOME sem filtrar tipo_entidade; hipótese: homônimo de "A INFORMAR" no Projuris. Investigado, sem fix ainda
