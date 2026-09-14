@@ -14,7 +14,7 @@
 - [Terminologia: adapter vs fluxo normal](terminologia-adapter-vs-fluxo-normal.md) — "adapter"/"adapter do pipeline" = pipeline.adapter.ts; "aplicação"/"fluxo normal" = resto, sem esse adapter
 - [Checar branch antes de assumir ambiente](feedback_checar_branch_antes_de_assumir_ambiente.md) — sempre `git branch --show-current` antes de assumir valores dev/prod (.env, tags Docker, etc.)
 - [Não alarmar sem necessidade](feedback_nao_alarmar_sem_necessidade.md) — se o usuário disser "calma, está tudo certo", parar a investigação daquele ponto imediatamente
-- [Documento sem sanitização na consulta](documento-sem-sanitizacao-consulta-entidade.md) — numero_documento vai mascarado (como chega da Hapvida) até a Projuris, sem regex de limpeza em lugar nenhum
+- [Documento sem sanitização na consulta](documento-sem-sanitizacao-consulta-entidade.md) — FIX aplicado: consulta agora tenta mascarado e depois só dígitos (base tem os dois formatos cadastrados)
 - [Correlacao.md desatualiza sozinho](correlacao-md-desatualiza-apos-renomeacoes.md) — renomes/campos novos no código não propagam pro .md de correlação; auditar contra hard-cadastro.json antes de confiar nele
 - [Tribunal com espaço sobrando na Projuris](projuris-tribunal-espaco-sobrando-dado-sujo.md) — "20ª Região" cadastrado com espaço sobrando no nome; busca exata só bate com o espaço; f:"NOME" é armadilha (campo inválido, retorna registro errado sempre)
 - [Filtro f:"NOME" genérico é ignorado pela Projuris](projuris-filtro-nome-generico-ignorado.md) — confirmado sistemático: cargo_processo usa f:"NOME" (errado) em vez de f:"NOME_CARGO_PROCESSO", causou cadastro de cargo errado em prod
