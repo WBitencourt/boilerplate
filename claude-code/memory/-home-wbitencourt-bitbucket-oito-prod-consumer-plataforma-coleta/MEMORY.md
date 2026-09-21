@@ -1,1 +1,1 @@
-- [PicPayCadastro natureza classificação](picpaycadastro_natureza_classificacao.md) — fix em DJE/Citação (2 repos, helper duplicado), Distribuídos fora, 1 pendência restante (erro no fluxo e-mail)
+- [PicPayCadastro natureza classificação](picpaycadastro_natureza_classificacao.md) — fix em DJE/Citação/posauditoria (2 repos), Distribuídos fora, pendências resolvidas, 1 ressalva anotada (acoplamento em enviaEmailFinalDia)
