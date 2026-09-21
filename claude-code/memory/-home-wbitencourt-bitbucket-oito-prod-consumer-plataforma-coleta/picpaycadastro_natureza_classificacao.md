@@ -5,12 +5,14 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 46a7beb3-31b7-490a-a383-2b995319b95a
-  modified: 2026-09-21T21:42:31.670Z
+  modified: 2026-09-21T21:48:53.668Z
 ---
 
 Implementado (2026-09-21): `DjeBusnessLogicPicPayService.executaRotinaFinal` e `CitacaoBusnessLogicPicPayService.executaRotinaFinal` (em `src/integracao_everest/dje/` e `src/integracao_everest/citacao/`, repo `prod-consumer-plataforma_coleta`) agora usam o helper `classificaNaturezaProcesso` (`src/integracao_everest/clientes/picpaycadastro/classificacaoNaturezaProcesso.ts`) para desviar demandas com natureza Trabalhista/Societário/Criminal/Tributário/Cível-Recuperação de Crédito direto para o fluxo de e-mail automático (`PosAuditoriaOito`) já no nascimento da demanda, em vez de depender só da rotina a cada 30min do `everest-scheduled` (`PicpayCadastroRotinasPeriodicas.isProcessoEmailAutomatico`) pra corrigir depois.
 
 Implementado também (mesmo dia, follow-up #1 abaixo resolvido): `citacaoIntimacao()` em `src/clientes/PicPayCadastro/picpaycadastro.pos_auditoria_oito.service.ts` (repo **`everest-prod-worker-posauditoria`**, fora do `prod-consumer-plataforma_coleta`) recebeu a mesma lógica — quando o processo já existe no Projuris (`desdobramento.idProcesso`), agora consulta `processoBrutoByIdProcessoConsulta`, checa `id-encerramento-ws` (→ `Processo encerrado`/`AguardandoProcessoEncerrado`) e roda o mesmo `classificaNaturezaProcesso` (helper local equivalente, criado em `src/clientes/PicPayCadastro/projuris/classificacaoNaturezaProcesso.ts` — repos diferentes, sem pacote compartilhado, então o helper foi duplicado lá) antes de decidir. Quando a natureza indica e-mail automático/polo ativo, chama `PicPayPosAuditoriaOito.enviaParaConsultaApi({ pkService })` (via `new Everest2DemandaService({ pk }).getStatus()`) em vez de mandar a demanda de volta pra `EsteiraOito` como `Atualização Jurídico`. `salvarDocumentosDoProjuris` só roda no fallback (natureza Cível/não reconhecida), mesma precedência do DJE.
+
+Também foi adicionada, logo no início de `citacaoIntimacao()` (antes de qualquer consulta ao Projuris), a mesma checagem barata de Trabalhista por dígito do CNJ (`demanda.processo.charAt(13) === '5'`) que existe no DJE/Citação — sem essa checagem, um processo trabalhista que ainda não existisse no Projuris cairia no branch "Cadastro Jurídico"/`EsteiraOito` em vez de ir direto pro e-mail (`enviaParaConsultaApi`). Essa lacuna foi identificada só depois, ao ser perguntado especificamente sobre "processo trabalhista" — vale sempre conferir se uma checagem barata/independente de API (como essa) foi replicada em TODOS os pontos de entrada, não só nos que já faziam consulta ao Projuris.
 
 **Decisão de escopo:** fluxo **Distribuídos** (`distribuido_business_logic_picpaycadastro.service.ts`) ficou de fora — quando `processoExistente=true` lá, a demanda já vira `Atualização Jurídico`+`Inativo` e nunca passa por `PosAuditoriaOito`, então não tinha o mesmo risco de corrida. Usuário optou por não mexer nesse branch por ora.
 
