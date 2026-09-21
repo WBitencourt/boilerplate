@@ -1,0 +1,1 @@
+- [PicPayCadastro natureza classificação](picpaycadastro_natureza_classificacao.md) — fix aplicado em DJE/Citação, Distribuídos fora de escopo, 2 pendências combinadas p/ depois
