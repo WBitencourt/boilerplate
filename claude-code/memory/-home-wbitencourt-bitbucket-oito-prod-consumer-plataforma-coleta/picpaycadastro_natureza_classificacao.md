@@ -1,11 +1,11 @@
 ---
 name: picpaycadastro-natureza-classificacao
-description: PicPayCadastro (DJE/Citação) agora classifica natureza do processo no nascimento da demanda; pendências de follow-up combinadas com o usuário
+description: PicPayCadastro classifica natureza do processo em 4 pontos de entrada (DJE, Citação, posauditoria, desdobramento manual) em 3 repos; todas as pendências combinadas resolvidas
 metadata: 
   node_type: memory
   type: project
   originSessionId: 46a7beb3-31b7-490a-a383-2b995319b95a
-  modified: 2026-09-21T22:16:50.892Z
+  modified: 2026-09-22T13:37:21.854Z
 ---
 
 Implementado (2026-09-21): `DjeBusnessLogicPicPayService.executaRotinaFinal` e `CitacaoBusnessLogicPicPayService.executaRotinaFinal` (em `src/integracao_everest/dje/` e `src/integracao_everest/citacao/`, repo `prod-consumer-plataforma_coleta`) agora usam o helper `classificaNaturezaProcesso` (`src/integracao_everest/clientes/picpaycadastro/classificacaoNaturezaProcesso.ts`) para desviar demandas com natureza Trabalhista/Societário/Criminal/Tributário/Cível-Recuperação de Crédito direto para o fluxo de e-mail automático (`PosAuditoriaOito`) já no nascimento da demanda, em vez de depender só da rotina a cada 30min do `everest-scheduled` (`PicpayCadastroRotinasPeriodicas.isProcessoEmailAutomatico`) pra corrigir depois.
@@ -24,8 +24,15 @@ Implementado também (mesmo dia, follow-up #2 abaixo resolvido — na parte de p
 
 **Ressalva registrada, não corrigida agora:** `enviaEmailFinalDia(cliente)` roda dentro do mesmo `try` de `picpayConsultaApi`/`enviaParaConsultaApi`, mas processa **todas** as demandas em fila `AguardandoRotinaFinalDia` daquele cliente, não só a atual. Se ela lançar uma exceção não tratada processando uma demanda *diferente* da que originou a chamada, isso sobe e aciona o revert do `enviaParaConsultaApi` da demanda que estava rodando — acoplamento pré-existente entre demandas não relacionadas dentro do mesmo lote, não introduzido por essa mudança.
 
-**Pendências combinadas com o usuário, para retomar depois (não implementadas ainda):**
-1. ~~`case 'Citação/Intimação'` dentro de `processaDemanda` no repo `everest-prod-worker-posauditoria`~~ — **feito** (ver acima).
-2. ~~Tratamento de erro nos fluxos de e-mail automático — perda de classificação original em exceção~~ — **feito** (ver acima). Resta como ressalva não corrigida: o acoplamento entre demandas do mesmo lote em `enviaEmailFinalDia` (ver "Ressalva" acima).
+Implementado também (2026-09-22, 4º ponto — endpoint manual de desdobramento): `PicPayDesdobramentoService.execute()` em `src/services/business_logic/demanda/desdobramento/desdobramento.picpay.service.ts` (repo **`everest-dev-backend`**, atrás do endpoint `PATCH /:pk/desdobramento`, `DemandaServices.desdobramento`) é uma ação **manual** (usuário na tela anexa/corrige o número do processo de uma demanda em `EsteiraOito`). Mesma lacuna: quando o processo é achado no Projuris (`responseFormatado.idProcesso`), o código sempre setava `tipo_demanda='Atualização Jurídico'` sem checar natureza nem encerramento. Corrigido:
+- Novo helper local (3ª cópia, mesmo conteúdo): `src/services/business_logic/demanda/desdobramento/classificacaoNaturezaProcesso.ts`.
+- Adicionado checagem barata de Trabalhista por dígito do CNJ (`numeroProcessoNovo.charAt(13) === '5'`) logo após a validação de tamanho (20 dígitos) — roda antes mesmo da consulta `desdobramento/consultar`. Se trabalhista: `tipo_demanda='Processo trabalhista'`, `perfil_demanda='TipificacaoOito'`, `status_demanda='PosAuditoriaOito'`, envia SQS fifo pra `Everest{ENV}PosAuditoriaOitoSqs.fifo` com `{pk}` (mesmo padrão do endpoint `envia_pos_auditoria_oito` já existente em `demanda.services.ts`).
+- No branch `idProcesso` encontrado: nova consulta raw-axios a `processo_bruto_by_id_processo/consultar` (esse arquivo não usa a classe `PicpayipExternalApiV2Service`, faz axios direto — replicado o mesmo padrão já usado em `salvarDocumentosDoProjuris` deste arquivo). Checa `id-encerramento-ws` → `'Processo encerrado'`/`AguardandoProcessoEncerrado'` (sem SQS, mesma precedência do DJE). Depois roda `classificaNaturezaProcesso` → se aplicável, mesma mecânica do trabalhista (SQS pra PosAuditoriaOito). `salvarDocumentosDoProjuris` + `'Atualização Jurídico'` só rodam no fallback (Cível/não reconhecida), igual às outras 3 implementações.
+- Branch "processo não encontrado" (`Cadastro Jurídico` + `status_demanda='ExcecaoOito'`, não `EsteiraOito` como nas outras origens — comportamento pré-existente deste endpoint específico) ficou **inalterado**.
 
-**How to apply:** ao retomar trabalho em PicPayCadastro/DJE/Citação/Distribuídos ou no `everest-prod-worker-posauditoria`, considerar a ressalva do acoplamento em `enviaEmailFinalDia` antes de assumir que o fluxo está 100% isolado por demanda. Se a regra de natureza mudar (ex: nova natureza divertida para e-mail), lembrar que existem **duas cópias** do helper `classificaNaturezaProcesso` (uma em cada repositório) — precisam ser atualizadas juntas.
+**Pendências combinadas com o usuário, para retomar depois (não implementadas ainda):**
+1. ~~`case 'Citação/Intimação'` dentro de `processaDemanda` no repo `everest-prod-worker-posauditoria`~~ — **feito**.
+2. ~~Tratamento de erro nos fluxos de e-mail automático — perda de classificação original em exceção~~ — **feito**. Resta como ressalva não corrigida: o acoplamento entre demandas do mesmo lote em `enviaEmailFinalDia` (ver "Ressalva" acima).
+3. ~~Endpoint manual `PATCH /:pk/desdobramento` (`everest-dev-backend`)~~ — **feito** (ver 4º ponto acima).
+
+**How to apply:** ao retomar trabalho em PicPayCadastro/DJE/Citação/Distribuídos, `everest-prod-worker-posauditoria` ou `everest-dev-backend`, considerar a ressalva do acoplamento em `enviaEmailFinalDia` antes de assumir que o fluxo está 100% isolado por demanda. Se a regra de natureza mudar (ex: nova natureza desviada para e-mail), lembrar que existem **três cópias** do helper `classificaNaturezaProcesso` (uma por repositório: `prod-consumer-plataforma_coleta`, `everest-prod-worker-posauditoria`, `everest-dev-backend`) — precisam ser atualizadas juntas. Note também que o repo se chama "dev" mas foi onde o usuário pediu a mudança (não confundir com `everest-prod-backend`, que não foi tocado — perguntar se também precisa lá, caso relevante no futuro).
