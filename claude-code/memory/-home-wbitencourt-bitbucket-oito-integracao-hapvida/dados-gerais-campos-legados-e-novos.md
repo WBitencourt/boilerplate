@@ -22,6 +22,13 @@ Campos novos (descobertos pelo valor no processo 329983 em Dev):
 
 - outras_informacoes.data_recebimento_liminar_iso/_br → `data-receb-liminar-custom` (processo 329984, 01/11/2026)
 
+Campos de multa/obrigação em outras_informacoes (processo 329984, 2026-10-05) — ATENÇÃO aos formatos de flag diferentes:
+- pedido_obrigacao_fazer → `pedido-obrigacao-fazer-custom` **S/N** (prioridade sobre o antigo dados_gerais.pedido_obrigacao_fazer, que virou fallback)
+- tem_aplicacao_multa → `tem-aplicacao-multa-custom` **T/F**
+- tem_teto_multa → `tem-teto-multa-custom` **S/N**
+- valor_maximo_multa → `valor-maximo-multa-custom` (número com vírgula, igual valor_multa)
+- status_operacional_obrigacao_fazer → `id-status-oper-obrig-custom` via LtStatusOperacionalObrigacaoCustomWS; contexto da requisição precisa ser `lt-status-operacional-obrigacao-custom` (o curto lt-status-oper-obrig-custom é aceito na request mas a resposta vem como lt-status-operacional-obrigacao-custom-response, e o formatResponse procura <contexto>-response → data vazio)
+
 **formulario_referencia NÃO funciona (2026-10-05):** campo real na Projuris é `id-formul-rio-custom` (BELO DENTE = 54, visto no processo 329983), mas a external API manda `<id-formulario-custom>` e o endpoint `formulario_referencia/consultar` é SIMULADO (sempre id 1). Nome do WS de consulta desconhecido: LtFormularioCustomWS (URL no .env) e variações (LtFORMULARIOCustomWS, LtFormulRioCustomWS etc.) respondem "PJ002 sessão inválida" = WS inexistente. Não corrigir só a tag enquanto o endpoint for simulado (gravaria formulário id 1 errado). Precisa do nome do WS com a equipe Projuris.
 
 Os três Lt*CustomWS filtram de verdade por `f:"NOME"` (diferente de [[projuris-filtro-nome-generico-ignorado]]).
