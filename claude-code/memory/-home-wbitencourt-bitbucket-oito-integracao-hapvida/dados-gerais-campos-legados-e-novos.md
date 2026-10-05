@@ -12,7 +12,7 @@ Desde 2026-10-05 o DTO de `dados_gerais` usa os nomes novos; os antigos são con
 - tipo_solicitacao → causa_raiz_n1 · assunto → causa_raiz_n2 · especialidade_medica → causa_raiz_n3
 - empresa_beneficiario → empresa_contabilidade · tipo_evento_gerador → tipo_fato_gerador
 
-Fixtures de origem pipeline (`*-from-pipeline.json`) mantêm os nomes antigos de propósito (é o que o pipeline manda); os demais fixtures usam os novos.
+Fixtures de origem pipeline (`*-from-pipeline.json`) mantêm os nomes antigos (é o que o pipeline manda) e, a pedido do usuário, têm o nome novo logo abaixo com o mesmo valor; os demais fixtures usam só os novos.
 
 Campos novos (descobertos pelo valor no processo 329983 em Dev):
 - dados_gerais.assunto2 → `id-assunto-custom` (LtAssuntoCustomWS, endpoint `assunto_custom/consultar`)
