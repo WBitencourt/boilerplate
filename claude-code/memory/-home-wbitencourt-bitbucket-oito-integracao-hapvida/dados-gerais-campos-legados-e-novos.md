@@ -1,6 +1,6 @@
 ---
 name: dados-gerais-campos-legados-e-novos
-description: de-para de nomes antigos de dados_gerais (pipeline ainda manda os antigos) + mapeamento dos campos novos assunto2/tipo_classificacao_civel/tipo_solicitacao2/listar_como_fundamento
+description: de-para de nomes antigos de dados_gerais (pipeline ainda manda os antigos) + mapeamento dos campos novos assunto2/tipo_classificacao_civel/tipo_solicitacao2/listar_como_andamento
 metadata:
   node_type: memory
   type: project
@@ -18,7 +18,7 @@ Campos novos (descobertos pelo valor no processo 329983 em Dev):
 - dados_gerais.assunto2 → `id-assunto-custom` (LtAssuntoCustomWS, endpoint `assunto_custom/consultar`)
 - dados_gerais.tipo_classificacao_civel → `id-tipo-civel-custom` (LtTipoCivelCustomWS, `tipo_civel_custom/consultar`)
 - dados_gerais.tipo_solicitacao2 → `id-tipo-solicitacao-custom` (LtTipoSolicitacaoCustomWS, `tipo_solicitacao_custom/consultar`)
-- eventos[].listar_como_fundamento → `listar-andamento` (T/F) — inferido: único flag que mudou no evento Audiência editado na tela
+- eventos[].listar_como_andamento → `listar-andamento` (T/F) — nome confirmado pelo usuário (tela: "Listar como andamento")
 
 Os três Lt*CustomWS filtram de verdade por `f:"NOME"` (diferente de [[projuris-filtro-nome-generico-ignorado]]).
 
