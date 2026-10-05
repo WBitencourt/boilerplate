@@ -20,3 +20,4 @@
 - [Filtro f:"NOME" genérico é ignorado pela Projuris](projuris-filtro-nome-generico-ignorado.md) — confirmado sistemático: cargo_processo usa f:"NOME" (errado) em vez de f:"NOME_CARGO_PROCESSO", causou cadastro de cargo errado em prod
 - [Juiz virou "A INFORMAR - CRM AM003070"](bug-juiz-a-informar-homonimo-projuris.md) — CONFIRMADO homônimo (Obtem pega 1º match); fix aplicado no pipeline.adapter.ts (juiz "A INFORMAR" → null), não no EntidadeResolverService
 - [Advogado interno ≠ usuário](advogado-interno-custom-nao-e-usuario.md) — id-advogado-interno-custom vem de LtAdvogadoInternoCustomWS (DANIEL: usuário 2265, interno 18); pipeline usa 1º adicional
+- [Natureza: busca ignora acento](projuris-natureza-busca-insensivel-acento.md) — "Cível"/"Civel" → id 21 na Projuris; fixtures usam "Cível" pra bater com o adapter (caso 6); DANIEL não existe em Dev
