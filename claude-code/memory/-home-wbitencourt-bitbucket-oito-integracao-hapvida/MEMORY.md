@@ -21,3 +21,4 @@
 - [Juiz virou "A INFORMAR - CRM AM003070"](bug-juiz-a-informar-homonimo-projuris.md) — CONFIRMADO homônimo (Obtem pega 1º match); fix aplicado no pipeline.adapter.ts (juiz "A INFORMAR" → null), não no EntidadeResolverService
 - [Advogado interno ≠ usuário](advogado-interno-custom-nao-e-usuario.md) — id-advogado-interno-custom vem de LtAdvogadoInternoCustomWS (DANIEL: usuário 2265, interno 18); pipeline usa 1º adicional
 - [Natureza: busca ignora acento](projuris-natureza-busca-insensivel-acento.md) — "Cível"/"Civel" → id 21; fixtures usam "Civel" (tela); adapter caso 6 agora ignora acento; DANIEL não existe em Dev
+- [Pasta ≠ id-processo](numero-pasta-diferente-de-id-processo.md) — `pasta` (tela) e `id-processo` (interno) são distintos; output de Cadastro devolve numero_pasta, id_processo, id_processo_desdobramento
