@@ -22,3 +22,4 @@
 - [Advogado interno ≠ usuário](advogado-interno-custom-nao-e-usuario.md) — id-advogado-interno-custom vem de LtAdvogadoInternoCustomWS (DANIEL: usuário 2265, interno 18); pipeline usa 1º adicional
 - [Natureza: busca ignora acento](projuris-natureza-busca-insensivel-acento.md) — "Cível"/"Civel" → id 21; fixtures usam "Civel" (tela); adapter caso 6 agora ignora acento; DANIEL não existe em Dev
 - [Pasta ≠ id-processo](numero-pasta-diferente-de-id-processo.md) — `pasta` (tela) e `id-processo` (interno) são distintos; output de Cadastro devolve numero_pasta, id_processo, id_processo_desdobramento
+- [dados_gerais: de-para + campos novos](dados-gerais-campos-legados-e-novos.md) — nomes antigos→causa_raiz_n1/n2/n3 etc. (toda origem); assunto2/tipo_classificacao_civel/tipo_solicitacao2/listar_como_fundamento mapeados
