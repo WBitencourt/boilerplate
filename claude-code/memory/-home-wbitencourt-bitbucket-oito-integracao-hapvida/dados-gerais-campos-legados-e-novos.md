@@ -20,6 +20,10 @@ Campos novos (descobertos pelo valor no processo 329983 em Dev):
 - dados_gerais.tipo_solicitacao2 → `id-tipo-solicitacao-custom` (LtTipoSolicitacaoCustomWS, `tipo_solicitacao_custom/consultar`)
 - eventos[].listar_como_andamento → `listar-andamento` (T/F) — nome confirmado pelo usuário (tela: "Listar como andamento")
 
+- outras_informacoes.data_recebimento_liminar_iso/_br → `data-receb-liminar-custom` (processo 329984, 01/11/2026)
+
+**formulario_referencia NÃO funciona (2026-10-05):** campo real na Projuris é `id-formul-rio-custom` (BELO DENTE = 54, visto no processo 329983), mas a external API manda `<id-formulario-custom>` e o endpoint `formulario_referencia/consultar` é SIMULADO (sempre id 1). Nome do WS de consulta desconhecido: LtFormularioCustomWS (URL no .env) e variações (LtFORMULARIOCustomWS, LtFormulRioCustomWS etc.) respondem "PJ002 sessão inválida" = WS inexistente. Não corrigir só a tag enquanto o endpoint for simulado (gravaria formulário id 1 errado). Precisa do nome do WS com a equipe Projuris.
+
 Os três Lt*CustomWS filtram de verdade por `f:"NOME"` (diferente de [[projuris-filtro-nome-generico-ignorado]]).
 
 **Why:** a equipe Projuris adicionou campos nas telas; o usuário só garante os obrigatórios e mapeia os novos sob demanda.
