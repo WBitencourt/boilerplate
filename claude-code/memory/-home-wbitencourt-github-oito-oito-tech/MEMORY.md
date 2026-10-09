@@ -1,0 +1,1 @@
+- [Check active main before run](check-active-main-before-run.md) — crud-dynamodb index.ts mains hit PROD; verify which is active before npm run dev
