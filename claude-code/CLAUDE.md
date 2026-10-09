@@ -10,6 +10,12 @@
 - Always check the current git branch (`git branch --show-current`) before assuming which environment (dev/prod/etc.) applies — don't reuse environment-specific values (`.env` contents, image tags, config) seen earlier in the conversation without confirming the current branch first.
 - Treat "troquei de branch" (or similar) from the user as a signal to re-check context before continuing.
 
+## Re-check code before executing it
+
+- The developer edits files between my turns. Before running any script or command that executes project code (`npm run dev`, `tsx`, `node`, etc.), re-read the entry point and what it calls (`git diff`, file mtime, the active `main()`), and confirm it still does exactly what I intend. Never assume the code is the same as when I last edited or ran it.
+- If the code changed and is no longer mine/what I expect, stop and ask before running — especially when it can write to production (DynamoDB, S3, SQS, databases).
+- Prefer running one-off tasks through a separate entry file I create (e.g. `npx tsx ./_script.ts`) instead of the developer's shared entry point.
+
 # Code Style
 
 ## Function declarations
