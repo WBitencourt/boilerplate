@@ -18,4 +18,4 @@ console.log(envSchema.safeParse(process.env));
 export type Env = z.infer<typeof envSchema>;
 
 // Isso vai lançar um erro e parar o app se faltar alguma variável crítica
-export const env: Env = envSchema.parse(process.env as unknown);
+export const env: Env = envSchema.parse(process.env);
