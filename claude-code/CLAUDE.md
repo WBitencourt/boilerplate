@@ -23,6 +23,7 @@ melhoria ou automação — registrar e manter atualizada a task no database **T
 
 - Página: `Wendell Bitencourt` — https://app.notion.com/p/Wendell-Bitencourt-3418ef240b6a80be9b0ef2b809f2e2b7
 - Database inline `Tasks` — `database_id`: `3418ef24-0b6a-800a-b2aa-f8e0c164f582`
+- `data_source_id` (Notion-Version `2025-09-03`, usar em `query-data-source` / `update-a-data-source` / parent de páginas novas): `3418ef24-0b6a-81b3-8377-000b12aac40e`
 - Acesso via MCP Notion (workspace **Oito Tecnologia**).
 
 ### Quando registrar
