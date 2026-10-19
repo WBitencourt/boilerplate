@@ -5,15 +5,32 @@
       "Read(//tmp/fixtures-dryrun/sqs/**)",
       "Bash(python3 -c ' *)",
       "Bash(echo \"exit: $?\")",
-      "Bash(npx jest *)"
+      "Bash(npx jest *)",
+      "Bash(node -e ' *)",
+      "Bash(git show *)",
+      "Bash(npx tsc *)",
+      "Bash(ls /home/wbitencourt/github/wbitencourt/boilerplate/claude-code/ 2>&1 | head -20)",
+      "Read(//home/wbitencourt/github/wbitencourt/boilerplate/claude-code/**)",
+      "Bash(grep -rn \"enviaEmailFinalDia\" /home/wbitencourt/bitbucket/oito/everest-prod-worker-posauditoria/src/ | grep -v node_modules)",
+      "Read(//home/wbitencourt/bitbucket/oito/everest-prod-worker-posauditoria/src/**)",
+      "Read(//home/wbitencourt/bitbucket/oito/everest-prod-worker-posauditoria/**)",
+      "Bash(echo \"EXIT_CODE=$?\")"
     ],
     "additionalDirectories": [
       "/home/wbitencourt/bitbucket/oito/everest-prod-external_api-v2/src/hapvida/dto",
-      "/home/wbitencourt/bitbucket/oito/everest-prod-external_api-v2"
+      "/home/wbitencourt/bitbucket/oito/everest-prod-external_api-v2",
+      "/home/wbitencourt/bitbucket/oito/everest-prod-worker-posauditoria/src/clientes/Picpay"
     ]
   },
-  "model": "sonnet",
+  "model": "opus",
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
   "tui": "fullscreen",
-  "theme": "dark"
+  "theme": "dark",
+  "agentPushNotifEnabled": true,
+  "remoteControlAtStartup": true
 }
