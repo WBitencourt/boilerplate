@@ -16,6 +16,28 @@
 - If the code changed and is no longer mine/what I expect, stop and ask before running — especially when it can write to production (DynamoDB, S3, SQS, databases).
 - Prefer running one-off tasks through a separate entry file I create (e.g. `npx tsx ./_script.ts`) instead of the developer's shared entry point.
 
+## Mensagens de commit
+
+- Antes de commitar, olhar `git log` do repo. Se ele tiver um padrão próprio consistente, seguir o do repo; senão, usar o formato abaixo.
+- Título: prefixo Conventional Commits (`fix:`, `feat:`, `chore:`, `refactor:`, `docs:`; escopo opcional, ex. `docs(claude-code):`) + frase em português dizendo o **efeito** da mudança, não o arquivo mexido.
+- Corpo (pular só em mudança trivial):
+  - Um parágrafo com o problema e **por que** acontecia — o contexto que o diff não mostra.
+  - Lista com `-` das mudanças concretas (funções, comportamento novo).
+  - Se relevante, uma linha sobre o que **não** muda (ex.: "Em Prod o comportamento não muda.").
+- Um commit por assunto: não misturar correções não relacionadas no mesmo commit.
+
+```text
+fix: PicPayCadastro não manda demanda finalizada para ExcecaoOito por falha no pré-relatório
+
+O status Finalizado era gravado antes do preRelatorioFinalDia, que só faz
+consultas de leitura ao Projuris para o relatório. Uma falha nessas
+consultas (ex.: HTTP 520) caía no catch do processaDemanda e levava a
+demanda de Finalizado para ExcecaoOito.
+
+- preRelatorioFinalDia só registra o erro no log, sem repassá-lo
+- cadastroJuridico e cadastroAtualizacao gravam Finalizado por último
+```
+
 ## Registrar trabalho no Notion (repos em /home/wbitencourt/bitbucket/oito)
 
 Sempre que trabalharmos em código dentro de `/home/wbitencourt/bitbucket/oito/*` — bug, investigação,
