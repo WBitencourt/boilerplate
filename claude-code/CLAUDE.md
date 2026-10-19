@@ -16,6 +16,90 @@
 - If the code changed and is no longer mine/what I expect, stop and ask before running — especially when it can write to production (DynamoDB, S3, SQS, databases).
 - Prefer running one-off tasks through a separate entry file I create (e.g. `npx tsx ./_script.ts`) instead of the developer's shared entry point.
 
+## Registrar trabalho no Notion (repos em /home/wbitencourt/bitbucket/oito)
+
+Sempre que trabalharmos em código dentro de `/home/wbitencourt/bitbucket/oito/*` — bug, investigação,
+melhoria ou automação — registrar e manter atualizada a task no database **Tasks** do Notion:
+
+- Página: `Wendell Bitencourt` — https://app.notion.com/p/Wendell-Bitencourt-3418ef240b6a80be9b0ef2b809f2e2b7
+- Database inline `Tasks` — `database_id`: `3418ef24-0b6a-800a-b2aa-f8e0c164f582`
+- Acesso via MCP Notion (workspace **Oito Tecnologia**).
+
+### Quando registrar
+
+- **No início**: criar a task (ou localizar a existente) antes/junto de começar a investigar.
+  Preencher `Start` com a data de hoje e `Status` = `In progress`.
+- **Durante**: ao chegar numa conclusão relevante (hipótese confirmada/descartada, causa raiz achada,
+  solução aplicada), atualizar o corpo da página — não esperar o fim.
+- **No fim**: `Status` = `Done` e **`End` obrigatório**. Sem `End` preenchido não é possível montar o
+  relatório por período, então nunca fechar uma task sem data de fim.
+
+### Propriedades do database
+
+| Propriedade | Tipo | Como preencher |
+|---|---|---|
+| `Description` | title | Título curto e buscável. Se houver nº de demanda/NIP/protocolo, prefixar: `<numero> - <resumo>` |
+| `ID` | texto | Nº da demanda / UUID / protocolo. `n/a` se não houver |
+| `Status` | status | `Not started`, `In progress`, `In review`, `Waiting deploy`, `Pending items`, `Stopped by another task`, `Done` |
+| `Priority Level` | select | `Maxima`, `Alta`, `Media`, `Baixa` — urgência |
+| `Start` / `End` | date | Início real e fim real (ver regra acima) |
+| `Tipo` | select | `Bug`, `Melhoria`, `Nova feature`, `Investigação`, `Infra/Deploy`, `Automação`, `Suporte` |
+| `Repositório` | multi-select | Nome da pasta em `bitbucket/oito` (ex.: `everest-prod-external_api-v2`). Pode ser mais de um |
+| `Cliente/Sistema` | multi-select | `Hapvida`, `PicPay`, `Sumicity`, `Everest`, `ANS/NIP`, etc. |
+| `Causa raiz` | texto | **Uma linha** — a causa real, não o sintoma |
+| `Solução` | texto | **Uma linha** — o que foi feito pra resolver |
+| `Impacto` | texto | Efeito prático, de preferência quantificado ("deixou de perder ~X e-mails/dia", "destravou integração do cliente Y") |
+| `Severidade` | select | `Crítico (prod parado)`, `Alto`, `Médio`, `Baixo` — consequência (≠ `Priority Level`, que é urgência) |
+| `Ambiente` | select | `prod`, `homolog`, `dev` |
+| `Referências` | texto | Branch, commit, PR, link do Bitbucket, ARN/URL do recurso AWS |
+| `Tags` | multi-select | Palavras-chave técnicas (`dynamodb`, `sqs`, `axios`, `timeout`, `cnpj-alfanumerico`) — é o que faz a busca funcionar depois |
+
+### Corpo da página (seções fixas)
+
+Texto longo vai **no corpo da página**, nunca nas colunas. Usar sempre estes headings, nesta ordem:
+
+```markdown
+## Contexto / Sintoma
+O que foi observado, quem reportou, evidências (log, ID da demanda, print, payload).
+
+## Diagnóstico
+Discussão resumida: hipóteses levantadas, o que foi testado, o que foi descartado e por quê.
+Registrar o raciocínio — é isso que responde "como vocês chegaram nessa conclusão?".
+
+## Causa raiz
+A causa real, com o ponto exato no código (`arquivo.ts:linha`, função, query, config).
+
+## Solução aplicada
+O que mudou: arquivos, funções, migração, variável de ambiente. Branch/commit.
+
+## Como validamos
+Teste, execução, log ou consulta que comprova que resolveu. Em qual ambiente.
+
+## Impacto
+Efeito no negócio/operação, quantificado quando possível.
+
+## Pendências / follow-up
+O que ficou de fora, débito técnico, risco remanescente.
+
+## Histórico
+- 2026-10-19 — início da investigação
+- 2026-10-20 — causa raiz identificada
+- 2026-10-21 — deploy em prod, validado
+```
+
+- Sempre datas absolutas (`2026-10-19`), nunca "ontem"/"semana passada".
+- Manter o `## Histórico` em ordem cronológica, uma linha por marco.
+
+### Objetivo final
+
+Os dados servem a dois usos — escrever pensando neles:
+
+1. **Consulta pontual**: "o que foi aquele bug do X?" → achar pelo título/`Tags`/`Causa raiz` e ter a
+   história inteira na página.
+2. **Relatório periódico pro chefe**: filtrar por `Start`/`End` num período e mostrar volume por
+   `Tipo`/`Cliente/Sistema` e o `Impacto` de cada entrega. O formato do relatório ainda será definido —
+   por isso a prioridade é ter os dados completos e consistentes agora.
+
 # Code Style
 
 ## Function declarations
