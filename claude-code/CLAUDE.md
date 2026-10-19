@@ -19,7 +19,18 @@
 ## Mensagens de commit
 
 - Antes de commitar, olhar `git log` do repo. Se ele tiver um padrão próprio consistente, seguir o do repo; senão, usar o formato abaixo.
-- Título: prefixo Conventional Commits (`fix:`, `feat:`, `chore:`, `refactor:`, `docs:`; escopo opcional, ex. `docs(claude-code):`) + frase em português dizendo o **efeito** da mudança, não o arquivo mexido.
+- Título: prefixo Conventional Commits (tabela abaixo; escopo opcional, ex. `docs(claude-code):`) + frase em português dizendo o **efeito** da mudança, não o arquivo mexido.
+
+| Prefixo | Significado | Quando usar |
+|---|---|---|
+| `feat` | Feature | Nova funcionalidade para o usuário |
+| `fix` | Fix | Correção de um erro |
+| `chore` | Chore | Atualizações "chatas" (configs, libs) |
+| `refactor` | Refactor | Melhoria de código sem mudar o comportamento |
+| `docs` | Documentation | Apenas texto/docs |
+| `style` | Style | Formatação de código (linter) |
+| `test` | Test | Testes automatizados |
+
 - Corpo (pular só em mudança trivial):
   - Um parágrafo com o problema e **por que** acontecia — o contexto que o diff não mostra.
   - Lista com `-` das mudanças concretas (funções, comportamento novo).
