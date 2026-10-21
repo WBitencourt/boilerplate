@@ -1,1 +1,2 @@
 - [PicPayCadastro natureza classificação](picpaycadastro_natureza_classificacao.md) — fix em DJE/Citação/posauditoria/desdobramento manual (3 repos), Distribuídos fora, ressalva em enviaEmailFinalDia
+- [machine_name galaxybook2](machine_name_galaxybook2.md) — em erros.prod é o notebook do usuário (execução local), não servidor
