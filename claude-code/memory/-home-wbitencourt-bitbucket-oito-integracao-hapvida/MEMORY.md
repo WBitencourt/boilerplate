@@ -25,3 +25,4 @@
 - [Erro por camada (Cloudflare/external API)](diagnostico-erro-por-camada-hapvida.md) — ECONNRESET sem corpo = external API; 502/520 = Cloudflare/Projuris; auditoria em infraestrutura.external_api
 - [dados_gerais: de-para + campos novos](dados-gerais-campos-legados-e-novos.md) — nomes antigos→causa_raiz_n1/n2/n3 etc. (toda origem); assunto2/tipo_classificacao_civel/tipo_solicitacao2/listar_como_andamento mapeados
 - [n8n preenche advogados dos eventos](n8n-preenche-advogados-eventos.md) — eventos[].advogados vem do n8n antes da fila; sem ele a validação reprova tudo (inclusive documentos); adapter não tem fallback
+- [Não mexer no everest-dev-demanda-stack](nao-mexer-everest-dev-demanda-stack.md) — pedido explícito: nada de editar, commitar, build ou deploy nesse repo; avisar se uma tarefa o envolver
